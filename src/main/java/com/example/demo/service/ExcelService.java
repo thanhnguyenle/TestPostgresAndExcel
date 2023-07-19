@@ -15,10 +15,12 @@ import java.util.List;
 public class ExcelService {
     @Autowired
     private ActorRepository actorRepository;
+    @Autowired
+    ExcelHelper excelHelper;
 
     public void save(MultipartFile file) {
         try {
-            List<Actor> tutorials = ExcelHelper.excelToTutorials(file.getInputStream());
+            List<Actor> tutorials = excelHelper.excelToTutorials(file.getInputStream());
             actorRepository.saveAll(tutorials);
         } catch (IOException e) {
             throw new RuntimeException("fail to store excel data: " + e.getMessage());
@@ -28,7 +30,7 @@ public class ExcelService {
     public ByteArrayInputStream load() {
         List<Actor> tutorials = actorRepository.findAll();
 
-        ByteArrayInputStream in = ExcelHelper.tutorialsToExcel(tutorials);
+        ByteArrayInputStream in = excelHelper.tutorialsToExcel(tutorials);
         return in;
     }
 }
